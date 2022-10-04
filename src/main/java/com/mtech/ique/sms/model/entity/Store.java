@@ -3,12 +3,11 @@ package com.mtech.ique.sms.model.entity;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
 import java.util.List;
 
 @Setter
 @Getter
-@Entity
+// @Entity
 public class Store {
 
   private Long id;
