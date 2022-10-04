@@ -11,9 +11,9 @@ env:
   GAR_LOCATION: asia-southeast1
   GKE_CLUSTER: ique-app  
   GKE_ZONE: asia-southeast1-a  
-  DEPLOYMENT_NAME: ique-ums
+  DEPLOYMENT_NAME: ique-store
   REPOSITORY: ique-star6ucks
-  IMAGE: ique-ums
+  IMAGE: ique-store
 
 jobs:
   setup-build-publish-deploy:
