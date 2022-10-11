@@ -1,9 +1,8 @@
 package com.mtech.ique.sms.model.enums;
 
 public enum StoreStatus {
-  ACTIVATED("activated"),
-  PENDING("pending"),
-  CANCELLED("cancelled");
+  ON_SERVICE("onService"),
+  STOP_SERVICE("stopService");
 
   private final String status;
 
