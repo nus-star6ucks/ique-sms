@@ -9,9 +9,9 @@ spring:
       sql:
         instance-connection-name: ique-star6ucks:asia-southeast1:iqueue
         database-name: ique
-  kubernetes:
-    discovery:
-      all-namespaces=true: true
+  #  kubernetes:
+  #    discovery:
+  #      all-namespaces=true: true
   datasource:
     #    url: jdbc:postgresql://localhost:5432/iqueue
     #    url: jdbc:postgresql:///ique
