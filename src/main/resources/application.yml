@@ -29,6 +29,11 @@ spring:
       ddl-auto: update
     show-sql: true
 
+feign:
+  client:
+    url:
+      qms: http://10.24.7.94
+
 management:
   endpoints:
     web:

@@ -4,7 +4,6 @@ import com.mtech.ique.sms.model.entity.Store;
 import com.mtech.ique.sms.service.QMSClient;
 import com.mtech.ique.sms.service.StoreManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -19,7 +18,7 @@ import java.util.Optional;
 public class StoreController {
 
   private final StoreManagementService storeManagementService;
-  @Autowired private DiscoveryClient discoveryClient;
+  //  @Autowired private DiscoveryClient discoveryClient;
   @Autowired private QMSClient qmsClient;
 
   public StoreController(StoreManagementService storeManagementService) {
@@ -68,15 +67,15 @@ public class StoreController {
   public ResponseEntity<Object> stopService() {
     return null;
   }
-
-  // Todo: just for testing the k8s discovery client.
-  @GetMapping(value = {"/test", "/test/{id}"})
-  public ResponseEntity<Object> getServices(@PathVariable(required = false) String instanceId) {
-    if (null != instanceId) {
-      return new ResponseEntity<>(discoveryClient.getInstances(instanceId), HttpStatus.OK);
-    }
-    return new ResponseEntity<>(discoveryClient.getServices(), HttpStatus.OK);
-  }
+  //
+  //  // Todo: just for testing the k8s discovery client.
+  //  @GetMapping(value = {"/test", "/test/{id}"})
+  //  public ResponseEntity<Object> getServices(@PathVariable(required = false) String instanceId) {
+  //    if (null != instanceId) {
+  //      return new ResponseEntity<>(discoveryClient.getInstances(instanceId), HttpStatus.OK);
+  //    }
+  //    return new ResponseEntity<>(discoveryClient.getServices(), HttpStatus.OK);
+  //  }
 
   @GetMapping("/feign/{id}")
   public ResponseEntity<Object> getQueueInfo(@PathVariable Long id) {

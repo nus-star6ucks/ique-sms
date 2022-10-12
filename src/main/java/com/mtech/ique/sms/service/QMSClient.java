@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(value = "ique-qms", path = "/queues")
+@FeignClient(value = "ique-qms", path = "/queues", url = "http://${feign.client.url.qms}")
 public interface QMSClient {
 
   @GetMapping
