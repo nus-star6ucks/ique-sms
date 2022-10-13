@@ -33,9 +33,11 @@ spring:
     show-sql: true
 
 feign:
+  server:
+    name: ique-qms
   client:
     url:
-      qms: ${QMS_URL:http://10.24.7.94}
+      qms: ${QMS_URL:http://${feign.server.name}}
 #      qms: ${QMS_URL:http://localhost:8080}
 
 management:
