@@ -32,7 +32,8 @@ spring:
 feign:
   client:
     url:
-      qms: http://10.24.7.94
+      qms: ${QMS_URL:http://10.24.7.94}
+#      qms: ${QMS_URL:http://localhost:8080}
 
 management:
   endpoints:
