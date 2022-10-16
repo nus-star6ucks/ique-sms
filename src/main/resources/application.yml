@@ -10,14 +10,10 @@ spring:
       sql:
         instance-connection-name: ique-star6ucks:asia-southeast1:iqueue
         database-name: ique
-      credentials:
-        location: file:/secrets/credentials.json
-  #  kubernetes:
-  #    discovery:
-  #      all-namespaces=true: true
+        credentials:
+          location: file:/secrets/credentials.json
   datasource:
     #    url: jdbc:postgresql://localhost:5432/iqueue
-    #    url: jdbc:postgresql:///ique
     url: jdbc:postgresql://ique
     username: ${DB_USER}
     password: ${DB_PASS}
@@ -31,6 +27,11 @@ spring:
       # Hibernate ddl auto (create, create-drop, validate, update)
       ddl-auto: update
     show-sql: true
+  redis:
+    database: 0
+    host: ${REDIS_HOST:ique-redis}
+    port: ${REDIS_PORT:6379}
+#    password: ${REDIS_PASSWORD:redis}
 
 feign:
   server:

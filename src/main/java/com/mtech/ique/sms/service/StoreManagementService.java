@@ -20,7 +20,7 @@ public interface StoreManagementService {
 
   void deleteStore(Long storeId);
 
-  void startService(Long storeId);
+  Boolean startService(Long storeId);
 
   void stopService(Long storeId);
 }
