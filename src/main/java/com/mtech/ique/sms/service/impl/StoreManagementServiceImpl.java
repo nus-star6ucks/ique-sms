@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -22,7 +23,6 @@ public class StoreManagementServiceImpl implements StoreManagementService {
 
   private static final ObjectMapper objectMapper = new ObjectMapper();
   private final StoreRepository storeRepository;
-
   private final RedisTemplate<Long, Long> redisTemplate;
   private final QMSClient qmsClient;
 
@@ -104,7 +104,7 @@ public class StoreManagementServiceImpl implements StoreManagementService {
                               queueId = e.getValue();
                             }
                           }
-                          redisTemplate.opsForValue().set(seatTypeId, queueId);
+                          redisTemplate.opsForValue().set(seatTypeId, queueId, Duration.ofDays(2));
                         });
                 store.setStatus(StoreStatus.ON_SERVICE.toString());
                 updateStoreInfo(store);
