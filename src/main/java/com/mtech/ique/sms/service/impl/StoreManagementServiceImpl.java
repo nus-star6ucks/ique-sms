@@ -2,6 +2,7 @@ package com.mtech.ique.sms.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.mtech.ique.sms.model.dto.QueueInfo;
 import com.mtech.ique.sms.model.entity.Store;
 import com.mtech.ique.sms.model.enums.StoreStatus;
 import com.mtech.ique.sms.repository.StoreRepository;
@@ -13,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -62,9 +62,13 @@ public class StoreManagementServiceImpl implements StoreManagementService {
                   objectMapper.valueToTree(
                       store.getSeatTypes().stream()
                           .map(
-                              seatType ->
-                                  qmsClient.getQueueInfo(
-                                      redisTemplate.opsForValue().get(seatType.getId())))
+                              seatType -> {
+                                Long queueId = redisTemplate.opsForValue().get(seatType.getId());
+                                if (null == queueId) {
+                                  return new QueueInfo();
+                                }
+                                return qmsClient.getQueueInfo(queueId);
+                              })
                           .collect(Collectors.toList())));
               return storeNode;
             })
@@ -94,18 +98,10 @@ public class StoreManagementServiceImpl implements StoreManagementService {
                 qmsClient
                     .createQueues(store.getSeatTypes())
                     .forEach(
-                        m -> {
-                          Long seatTypeId = 0L;
-                          Long queueId = 0L;
-                          for (Map.Entry<String, Long> e : m.entrySet()) {
-                            if ("seatTypeId".equals(e.getKey())) {
-                              seatTypeId = e.getValue();
-                            } else {
-                              queueId = e.getValue();
-                            }
-                          }
-                          redisTemplate.opsForValue().set(seatTypeId, queueId, Duration.ofDays(2));
-                        });
+                        m ->
+                            redisTemplate
+                                .opsForValue()
+                                .set(m.get("seatTypeId"), m.get("queueId"), Duration.ofDays(2)));
                 store.setStatus(StoreStatus.ON_SERVICE.toString());
                 updateStoreInfo(store);
               }
