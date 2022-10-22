@@ -12,6 +12,8 @@ public interface StoreManagementService {
 
   List<Store> getStores();
 
+  List<Store> getStores(Long merchantId);
+
   Optional<Store> getStore(Long storeId);
 
   ObjectNode getStoreDetail(Long storeId);

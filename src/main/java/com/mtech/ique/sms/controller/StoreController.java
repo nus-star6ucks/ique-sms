@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -34,9 +35,15 @@ public class StoreController {
   }
 
   @GetMapping(value = {"", "/{id}"})
-  public ResponseEntity<Object> getStores(@PathVariable(required = false) Long id) {
+  public ResponseEntity<Object> getStores(
+      @PathVariable(required = false) Long id,
+      @RequestParam(name = "userId", required = false) Long merchantId) {
     if (null == id) {
-      return new ResponseEntity<>(storeManagementService.getStores(), HttpStatus.OK);
+      List<Store> storeList =
+          null == merchantId
+              ? storeManagementService.getStores()
+              : storeManagementService.getStores(merchantId);
+      return new ResponseEntity<>(storeList, HttpStatus.OK);
     } else {
       ObjectNode storeDetailNode = storeManagementService.getStoreDetail(id);
       return null != storeDetailNode

@@ -46,6 +46,11 @@ public class StoreManagementServiceImpl implements StoreManagementService {
   }
 
   @Override
+  public List<Store> getStores(Long merchantId) {
+    return storeRepository.findAllByMerchantIdIs(merchantId);
+  }
+
+  @Override
   public Optional<Store> getStore(Long storeId) {
     return storeRepository.findById(storeId);
   }
