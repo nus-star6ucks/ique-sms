@@ -121,10 +121,11 @@ public class StoreManagementServiceImpl implements StoreManagementService {
         .ifPresent(
             store -> {
               if (!StoreStatus.STOP_SERVICE.toString().equals(store.getStatus())) {
-                qmsClient.deleteQueues(
-                    store.getSeatTypes().stream()
-                        .map(seatType -> redisTemplate.opsForValue().getAndDelete(seatType.getId()))
-                        .collect(Collectors.toList()));
+                //                qmsClient.deleteQueues(
+                //                    store.getSeatTypes().stream()
+                //                        .map(seatType ->
+                // redisTemplate.opsForValue().getAndDelete(seatType.getId()))
+                //                        .collect(Collectors.toList()));
                 store.setStatus(StoreStatus.STOP_SERVICE.toString());
                 updateStoreInfo(store);
               }
