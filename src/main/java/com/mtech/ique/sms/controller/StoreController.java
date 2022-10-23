@@ -52,6 +52,11 @@ public class StoreController {
     }
   }
 
+  @GetMapping(value = {"/list"})
+  public ResponseEntity<Object> getStores() {
+    return new ResponseEntity<>(storeManagementService.getStores(), HttpStatus.OK);
+  }
+
   @PutMapping
   public ResponseEntity<Object> updateStore(@RequestBody Store store) {
     return new ResponseEntity<>(storeManagementService.updateStoreInfo(store), HttpStatus.OK);
