@@ -37,6 +37,7 @@ public class StoreManagementServiceImpl implements StoreManagementService {
 
   @Override
   public Store createStore(Store store) {
+    store.setStatus(StoreStatus.STOP_SERVICE.toString());
     return storeRepository.save(store);
   }
 
