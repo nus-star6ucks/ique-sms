@@ -10,18 +10,10 @@ spring:
         jwt:
           jws-algorithm: RS256
           public-key-location: file:./jwt_key.pub
-  cloud:
-    gcp:
-      project-id: ique-star6ucks
-      sql:
-        instance-connection-name: ique-star6ucks:asia-southeast1:iqueue
-        database-name: ique
-        credentials:
-          location: file:/secrets/credentials.json
   datasource:
-    url: jdbc:postgresql://ique
-    username: ${DB_USER}
-    password: ${DB_PASS}
+    url: jdbc:postgresql://localhost:5432/iqueue
+    username: ${DB_USER:user1}
+    password: ${DB_PASS:pass1}
     initialization-mode: always
   jpa:
     properties:
@@ -34,15 +26,16 @@ spring:
     show-sql: true
   redis:
     database: 0
-    host: ${REDIS_HOST:ique-redis}
+    host: ${REDIS_HOST:localhost}
     port: ${REDIS_PORT:6379}
+    password: ${REDIS_PASSWORD:redis}
 
 feign:
   server:
     name: ique-qms
   client:
     url:
-      qms: ${QMS_URL:http://${feign.server.name}}
+      qms: ${QMS_URL:http://localhost:8080}
 
 management:
   endpoints:

@@ -2,11 +2,12 @@ package com.mtech.ique.sms.controller;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.mtech.ique.sms.model.entity.Store;
-import com.mtech.ique.sms.service.QMSClient;
 import com.mtech.ique.sms.service.StoreManagementService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,13 +20,13 @@ import java.util.Map;
 public class StoreController {
 
   private final StoreManagementService storeManagementService;
-  @Autowired private QMSClient qmsClient;
 
   public StoreController(StoreManagementService storeManagementService) {
     this.storeManagementService = storeManagementService;
   }
 
   @PostMapping
+  @PreAuthorize("hasAuthority('SCOPE_merchant')")
   public ResponseEntity<Object> createStore(@RequestBody Store store) {
     Store createdStore = storeManagementService.createStore(store);
     Map<String, Object> map = new HashMap<>();
@@ -35,6 +36,7 @@ public class StoreController {
   }
 
   @GetMapping(value = {"", "/{id}"})
+  @PreAuthorize("hasAuthority('SCOPE_merchant')")
   public ResponseEntity<Object> getStores(
       @PathVariable(required = false) Long id,
       @RequestParam(name = "userId", required = false) Long merchantId) {
@@ -52,29 +54,33 @@ public class StoreController {
     }
   }
 
-  @GetMapping(value = {"/list"})
+  @GetMapping("/list")
   public ResponseEntity<Object> getStores() {
     return new ResponseEntity<>(storeManagementService.getStores(), HttpStatus.OK);
   }
 
   @PutMapping
+  @PreAuthorize("hasAuthority('SCOPE_merchant')")
   public ResponseEntity<Object> updateStore(@RequestBody Store store) {
     return new ResponseEntity<>(storeManagementService.updateStoreInfo(store), HttpStatus.OK);
   }
 
   @DeleteMapping
-  public ResponseEntity<Object> deleteStore(@RequestParam("id") Long id) {
-    storeManagementService.deleteStore(id);
+  @PreAuthorize("hasAuthority('SCOPE_merchant')")
+  public ResponseEntity<Object> deleteStore(@AuthenticationPrincipal Jwt jwtPrincipal) {
+    storeManagementService.deleteStore(jwtPrincipal.getClaim("userId"));
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 
   @PostMapping("/start")
+  @PreAuthorize("hasAuthority('SCOPE_merchant')")
   public ResponseEntity<Object> startService(@RequestParam("storeId") Long storeId) {
     storeManagementService.startService(storeId);
     return new ResponseEntity<>(HttpStatus.OK);
   }
 
   @PostMapping("/stop")
+  @PreAuthorize("hasAuthority('SCOPE_merchant')")
   public ResponseEntity<Object> stopService(@RequestParam("storeId") Long storeId) {
     storeManagementService.stopService(storeId);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
