@@ -44,11 +44,3 @@ feign:
     url:
       qms: ${QMS_URL:http://${feign.server.name}}
 
-management:
-  endpoints:
-    web:
-      exposure:
-        include: '*'
-  endpoint:
-    shutdown:
-      enabled: true
