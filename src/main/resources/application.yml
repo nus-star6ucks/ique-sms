@@ -9,7 +9,7 @@ spring:
       resource-server:
         jwt:
           jws-algorithm: RS256
-          public-key-location: file:./jwt_key.pub
+          public-key-location: file:${JWT_PUBLIC_KEY:/rsa-secrets/jwt_key.pub}
   cloud:
     gcp:
       project-id: ique-star6ucks
