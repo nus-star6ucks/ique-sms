@@ -8,12 +8,12 @@ on:
 
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
-  GAR_LOCATION: asia-southeast1
-  GKE_CLUSTER: ique-app
-  GKE_ZONE: asia-southeast1-a
-  DEPLOYMENT_NAME: ique-sms
-  REPOSITORY: ique-star6ucks
-  IMAGE: ique-sms
+  GAR_LOCATION: ${{ secrets.GAR_LOCATION }}
+  GKE_CLUSTER: ${{ secrets.GKE_CLUSTER }}  
+  GKE_ZONE: ${{ secrets.GKE_ZONE }}  
+  DEPLOYMENT_NAME: ${{ secrets.DEPLOYMENT_NAME }}
+  REPOSITORY: ${{ secrets.REPOSITORY }}
+  IMAGE: ${{ secrets.IMAGE }}
 
 jobs:
   setup-build-publish-deploy:
@@ -50,6 +50,11 @@ jobs:
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
 
+      - name: Retrieve Version
+        run: |
+         echo "::set-output name=VERSION_NAME::$(${{github.workspace}}/gradlew -q printVersionName)"
+        id: jar_version
+      
       - name: Execute Gradle Build
         working-directory: ./
         run: ./gradlew bootJar
@@ -77,8 +82,9 @@ jobs:
             --tag "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:latest" \
             --build-arg GITHUB_SHA="$GITHUB_SHA" \
             --build-arg GITHUB_REF="$GITHUB_REF" \
-            --build-arg JAR_FILE=build/libs/\*.jar \
+          --build-arg JAR_FILE=build/libs/sms-${{steps.jar_version.outputs.VERSION_NAME}}.jar \
             .
+            
       # Push the Docker image to Google Artifact Registry
       - name: Publish
         run: |-
@@ -86,4 +92,4 @@ jobs:
 
       - name: Run Cloud Build Trigger
         run: |-
-          gcloud beta builds triggers run ique-sms --branch=main
+          gcloud beta builds triggers run ${{ secrets.DEPLOYMENT_NAME }} --branch=main
