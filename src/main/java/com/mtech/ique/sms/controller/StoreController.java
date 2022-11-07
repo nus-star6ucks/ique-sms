@@ -36,7 +36,7 @@ public class StoreController {
   }
 
   @GetMapping(value = {"", "/{id}"})
-  @PreAuthorize("hasAuthority('SCOPE_merchant')")
+  //  @PreAuthorize("hasAuthority('SCOPE_merchant')")
   public ResponseEntity<Object> getStores(
       @PathVariable(required = false) Long id,
       @RequestParam(name = "userId", required = false) Long merchantId) {
