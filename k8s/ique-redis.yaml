@@ -1,0 +1,54 @@
+apiVersion: "apps/v1"
+kind: "Deployment"
+metadata:
+  name: "ique-redis"
+  namespace: "default"
+  labels:
+    app: "ique-redis"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: "ique-redis"
+  template:
+    metadata:
+      labels:
+        app: "ique-redis"
+    spec:
+      containers:
+      - name: "redis"
+        image: "docker.io/redis:7.0.5"
+        command: ["redis-server"]
+        ports:
+          - containerPort: 6379
+#     volumeMounts:
+#       - name: redis-persistent-storage
+#         mountPath: /data
+# volumes:
+#   - name: redis-persistent-storage
+#     persistentVolumeClaim:
+#       claimName: redis-volumeclaim
+# ---
+# apiVersion: v1
+# kind: PersistentVolumeClaim
+# metadata:
+#   name: redis-volumeclaim
+# spec:
+#   accessModes:
+#     - ReadWriteOnce
+#   resources:
+#     requests:
+#       storage: 2Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: "ique-redis"
+spec:
+  selector:
+    app: "ique-redis"
+  ports:
+    - protocol: TCP
+      port: 6379
+      targetPort: 6379
+  type: ClusterIP
